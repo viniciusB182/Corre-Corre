@@ -3,19 +3,24 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
-    public Animator         Anime;
-    public Rigidbody2D      PlayerRigidbody;
-    public int              JumpForce;
-    public bool             slide;
+    public Animator Anime;
+    public Rigidbody2D PlayerRigidbody;
+
+    //Pulo
+    public int JumpForce;
+    public bool slide;
 
     //Verifica o chão
     public Transform GroundCheck;
-    public bool             grounded;
+    public bool grounded;
     public LayerMask WhatIsGround;
 
-    //Slide
+    //Delize
     public float SlideTemp;
     public float TimeTemp;
+
+    //Colisor
+    public Transform Colidder;
 
     // Use this for initialization
     void Start()
@@ -29,22 +34,28 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Jump") && grounded)
         {
             PlayerRigidbody.AddForce(new Vector2(0, JumpForce));
-            slide = false;
+            if (slide)
+            {
+                Colidder.position = new Vector3(Colidder.position.x, Colidder.position.y + 0.325f);
+                slide = false;
+            }
         }
 
-        if(Input.GetButtonDown("Slide") && grounded)
+        if (Input.GetButtonDown("Slide") && grounded)
         {
+            Colidder.position = new Vector3(Colidder.position.x, Colidder.position.y - 0.325f);
             slide = true;
             TimeTemp = 0;
         }
 
         grounded = Physics2D.OverlapCircle(GroundCheck.position, 0.2f, WhatIsGround);
 
-        if(slide == true)
+        if (slide == true)
         {
             TimeTemp += Time.deltaTime;
-            if(TimeTemp >= SlideTemp)
+            if (TimeTemp >= SlideTemp)
             {
+                Colidder.position = new Vector3(Colidder.position.x, Colidder.position.y + 0.325f);
                 slide = false;
             }
         }
@@ -52,5 +63,10 @@ public class PlayerController : MonoBehaviour
         Anime.SetBool("jump", !grounded);
         Anime.SetBool("slide", slide);
 
+    }
+
+    void OnTriggerEnter2D()
+    {
+        Debug.Log("Bateu");
     }
 }
