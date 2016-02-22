@@ -17,5 +17,10 @@ public class MoveObject : MonoBehaviour {
         x += Speed * Time.deltaTime;
 
         transform.position = new Vector3(x, transform.position.y);
+
+        if(x <= -7)
+        {
+            Destroy(transform.gameObject);
+        }
 	}
 }

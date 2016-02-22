@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (Input.GetButtonDown("Slide") && grounded)
+        if (Input.GetButtonDown("Slide") && grounded && !slide)
         {
             Colidder.position = new Vector3(Colidder.position.x, Colidder.position.y - 0.325f);
             slide = true;
