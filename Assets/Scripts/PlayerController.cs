@@ -15,25 +15,41 @@ public class PlayerController : MonoBehaviour
     public bool grounded;
     public LayerMask WhatIsGround;
 
-    //Delize
+    //Deslize
     public float SlideTemp;
     public float TimeTemp;
 
     //Colisor
     public Transform Colidder;
 
+    //Audio
+    public AudioSource Audio;
+    public AudioClip SoundJump;
+    public AudioClip SoundSlide;
+
+    //Pontuacao
+    public UnityEngine.UI.Text TxtPontos;
+    public static int Pontuacao;
+
     // Use this for initialization
     void Start()
     {
-
+        Pontuacao = 0;
+        PlayerPrefs.SetInt("Pontuacao", Pontuacao);
     }
 
     // Update is called once per frame
     void Update()
     {
+        TxtPontos.text = Pontuacao.ToString();
+
         if (Input.GetButtonDown("Jump") && grounded)
         {
             PlayerRigidbody.AddForce(new Vector2(0, JumpForce));
+
+            Audio.PlayOneShot(SoundJump);
+            Audio.volume = 1;
+
             if (slide)
             {
                 Colidder.position = new Vector3(Colidder.position.x, Colidder.position.y + 0.325f);
@@ -43,6 +59,8 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetButtonDown("Slide") && grounded && !slide)
         {
+            Audio.PlayOneShot(SoundSlide);
+            Audio.volume = 0.5f;
             Colidder.position = new Vector3(Colidder.position.x, Colidder.position.y - 0.325f);
             slide = true;
             TimeTemp = 0;
@@ -67,6 +85,13 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerEnter2D()
     {
-        Debug.Log("Bateu");
+        PlayerPrefs.SetInt("Pontuacao", Pontuacao);
+
+        if (Pontuacao > PlayerPrefs.GetInt("Recorde"))
+        {
+            PlayerPrefs.SetInt("Recorde", Pontuacao);
+        }
+
+        Application.LoadLevel("GameOver");
     }
 }

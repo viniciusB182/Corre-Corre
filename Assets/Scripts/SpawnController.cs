@@ -4,11 +4,13 @@ using System.Collections;
 public class SpawnController : MonoBehaviour
 {
 
-    public GameObject BarrierPreFab; //Objeto a ser spawnado
-    public float RateSpawn;     //Intervalo de Spawn
-    public float CurrentTime;
-    private int Position;
-    private float y;
+    public GameObject              BarrierPreFab; //Objeto a ser spawnado
+    public float                   RateSpawn;     //Intervalo de Spawn
+    private float                  CurrentTime;
+    private int                    Position;
+    private float                  y;
+    public float                   posA;
+    public float                   posB;
 
     // Use this for initialization
     void Start()
@@ -26,11 +28,12 @@ public class SpawnController : MonoBehaviour
 
             if (Position > 50)
             {
-                y = -0.19f;
+                y = posA;
             }
             else
             {
-                y = -0.81f;
+                y = posB;
+                
             }
 
             CurrentTime = 0;
